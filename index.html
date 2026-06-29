@@ -1,8 +1,484 @@
-<html>
-  <head>
-    <title>메인페이지</title>
-  </head>
-  <body>
-    <h2>메인페이지 입니다...</h2>
-  </body>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyunguk Kim | AI 영상 크리에이터</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+  :root {
+    --bg-primary: #0b0f1e;
+    --bg-secondary: #0f1428;
+    --bg-card: #141930;
+    --accent-purple: #6366f1;
+    --accent-violet: #818cf8;
+    --accent-neon: #a5b4fc;
+    --accent-pink: #f9a8d4;
+    --accent-cyan: #67e8f9;
+    --text-primary: #f8faff;
+    --text-secondary: #d4daf5;
+    --text-muted: #8b96c8;
+    --border: rgba(129, 140, 248, 0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Noto Sans KR', sans-serif; background: var(--bg-primary); color: var(--text-primary); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; display: flex; align-items: center; justify-content: space-between; padding: 1.2rem 5vw; background: rgba(11, 15, 30, 0.92); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(129, 140, 248, 0.2); }
+  .nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 0.08em; color: var(--text-primary); }
+  .nav-logo span { color: var(--accent-neon); }
+  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+  .nav-links a { text-decoration: none; color: var(--text-secondary); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.05em; transition: color 0.3s; }
+  .nav-links a:hover { color: var(--text-primary); }
+
+  #hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 5vw 4rem; position: relative; overflow: hidden; }
+  .hero-glow { position: absolute; width: 800px; height: 800px; border-radius: 50%; background: radial-gradient(circle, rgba(99,102,241,0.2) 0%, rgba(67,56,202,0.08) 50%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%, -55%); pointer-events: none; animation: pulse 6s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: translate(-50%,-55%) scale(1); } 50% { opacity: 0.6; transform: translate(-50%,-55%) scale(1.1); } }
+  .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(99,102,241,0.15); border: 1px solid rgba(129,140,248,0.4); border-radius: 100px; padding: 0.45rem 1.3rem; font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-neon); margin-bottom: 2rem; font-weight: 500; }
+  .hero-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 700; line-height: 1.05; margin-bottom: 0.3rem; }
+  .hero-title .name-kr { display: block; background: linear-gradient(135deg, #f8faff 0%, #a5b4fc 45%, #67e8f9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-subtitle { font-family: 'Space Grotesk', sans-serif; font-size: clamp(1rem, 2.5vw, 1.4rem); font-weight: 400; color: var(--text-secondary); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 2rem; }
+  .hero-desc { max-width: 560px; font-size: 1.05rem; line-height: 1.9; color: var(--text-secondary); margin-bottom: 3rem; }
+  .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-primary { display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #4f46e5, #6366f1); color: #f8faff; text-decoration: none; padding: 0.9rem 2.2rem; border-radius: 10px; font-weight: 600; font-size: 0.92rem; transition: all 0.3s; box-shadow: 0 4px 20px rgba(99,102,241,0.4); }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(99,102,241,0.55); }
+  .btn-secondary { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(129,140,248,0.08); color: var(--text-primary); text-decoration: none; padding: 0.9rem 2.2rem; border-radius: 10px; font-weight: 500; font-size: 0.92rem; border: 1px solid rgba(129,140,248,0.35); transition: all 0.3s; }
+  .btn-secondary:hover { border-color: var(--accent-neon); color: var(--accent-neon); }
+
+  section { padding: 7rem 5vw; position: relative; }
+  .section-tag { font-family: 'Space Grotesk', sans-serif; font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.7rem; font-weight: 600; }
+  .section-tag::after { content: ''; flex: 1; max-width: 40px; height: 1px; background: var(--accent-cyan); opacity: 0.5; }
+  .section-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; margin-bottom: 1rem; line-height: 1.2; color: var(--text-primary); }
+  .section-header { max-width: 600px; margin-bottom: 4rem; }
+  .accent-divider { width: 60px; height: 3px; background: linear-gradient(90deg, #6366f1, #67e8f9); border-radius: 2px; margin: 1rem 0 2rem; }
+  .section-wrap { max-width: 1200px; margin: 0 auto; }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .about-text p { font-size: 1.02rem; line-height: 2; color: var(--text-secondary); margin-bottom: 1.3rem; }
+  .about-text p strong { color: #f0ecff; font-weight: 700; }
+  .about-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; transition: all 0.3s; }
+  .stat-card:hover { border-color: var(--accent-purple); transform: translateY(-3px); box-shadow: 0 8px 24px rgba(99,102,241,0.2); }
+  .stat-number { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 700; background: linear-gradient(135deg, #a5b4fc, #67e8f9); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 0.4rem; }
+  .stat-label { font-size: 0.82rem; color: #b0a8d0; line-height: 1.5; }
+  .tools-list { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+  .tool-chip { background: rgba(99,102,241,0.12); border: 1px solid rgba(129,140,248,0.3); color: var(--accent-neon); padding: 0.38rem 0.95rem; border-radius: 100px; font-size: 0.8rem; font-weight: 500; transition: all 0.3s; }
+  .tool-chip:hover { background: rgba(99,102,241,0.22); border-color: var(--accent-neon); }
+
+  .works-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.5rem; }
+  .works-grid > .work-card:nth-child(1) { grid-column: 1 / 3; }
+  .works-grid > .work-card:nth-child(2) { grid-column: 3 / 5; }
+  .works-grid > .work-card:nth-child(3) { grid-column: 5 / 7; }
+  .works-grid > .work-card:nth-child(4) { grid-column: 1 / 4; }
+  .works-grid > .work-card:nth-child(5) { grid-column: 4 / 7; }
+
+  .work-card { background: #13132e; border: 1px solid rgba(167,139,250,0.2); border-radius: 20px; overflow: hidden; transition: all 0.4s; cursor: pointer; position: relative; }
+  .work-card:hover { transform: translateY(-6px); border-color: rgba(167,139,250,0.55); box-shadow: 0 20px 48px rgba(124,58,237,0.28); }
+  .work-thumbnail { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #000; }
+  .work-thumbnail img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; display: block; }
+  .work-card:hover .work-thumbnail img { transform: scale(1.06); }
+  .play-overlay { position: absolute; inset: 0; background: rgba(11,15,30,0.55); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
+  .work-card:hover .play-overlay { opacity: 1; }
+  .play-btn { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #4f46e5, #67e8f9); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(99,102,241,0.6); font-size: 1.2rem; }
+  .work-featured-badge { position: absolute; top: 0.8rem; left: 0.8rem; background: linear-gradient(135deg, #4f46e5, #06b6d4); color: white; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 0.25rem 0.7rem; border-radius: 100px; }
+  .work-body { padding: 1.4rem 1.5rem 1.6rem; }
+  .work-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.8rem; }
+  .work-date { font-size: 0.75rem; color: #9890c0; }
+  .work-number { font-family: 'Space Grotesk', sans-serif; font-size: 0.72rem; color: var(--accent-violet); font-weight: 700; }
+  .work-title { font-family: 'Space Grotesk', sans-serif; font-size: 1.08rem; font-weight: 700; color: #f0ecff; margin-bottom: 0.6rem; line-height: 1.4; }
+  .work-desc { font-size: 0.88rem; color: #c4bde0; line-height: 1.75; margin-bottom: 1rem; }
+  .work-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .work-tool { background: rgba(103,232,249,0.08); border: 1px solid rgba(103,232,249,0.25); color: var(--accent-cyan); padding: 0.22rem 0.7rem; border-radius: 100px; font-size: 0.72rem; font-weight: 600; }
+
+  .timeline { position: relative; max-width: 900px; margin: 0 auto; }
+  .timeline::before { content: ''; position: absolute; left: 50%; transform: translateX(-50%); top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, transparent, #6366f1 15%, #6366f1 85%, transparent); opacity: 0.5; }
+  .timeline-item { position: relative; width: 50%; padding: 0 3rem 3rem; }
+  .timeline-item:nth-child(odd) { left: 0; text-align: right; }
+  .timeline-item:nth-child(even) { left: 50%; text-align: left; }
+  .timeline-dot { position: absolute; top: 0; width: 14px; height: 14px; border-radius: 50%; background: linear-gradient(135deg, #6366f1, #67e8f9); box-shadow: 0 0 14px rgba(99,102,241,0.65); z-index: 2; }
+  .timeline-item:nth-child(odd) .timeline-dot { right: -7px; }
+  .timeline-item:nth-child(even) .timeline-dot { left: -7px; }
+  .timeline-card { background: #141c38; border: 1px solid rgba(129,140,248,0.22); border-radius: 16px; padding: 1.3rem 1.5rem; transition: all 0.3s; }
+  .timeline-card:hover { border-color: rgba(129,140,248,0.5); box-shadow: 0 8px 28px rgba(99,102,241,0.22); }
+  .timeline-period { font-family: 'Space Grotesk', sans-serif; font-size: 0.75rem; color: var(--accent-cyan); font-weight: 700; margin-bottom: 0.4rem; }
+  .timeline-org { font-size: 1.05rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.25rem; }
+  .timeline-role { font-size: 0.87rem; color: var(--accent-neon); font-weight: 600; margin-bottom: 0.5rem; }
+  .timeline-detail { font-size: 0.87rem; color: var(--text-secondary); line-height: 1.7; }
+
+  .edu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.2rem; max-width: 900px; margin: 2rem auto 0; }
+  .edu-card { background: rgba(99,102,241,0.07); border: 1px solid rgba(129,140,248,0.2); border-radius: 14px; padding: 1.3rem 1.5rem; transition: all 0.3s; }
+  .edu-card:hover { background: rgba(99,102,241,0.13); border-color: rgba(129,140,248,0.4); }
+  .edu-period { font-size: 0.74rem; color: var(--text-muted); margin-bottom: 0.35rem; }
+  .edu-school { font-weight: 800; color: var(--text-primary); font-size: 1rem; margin-bottom: 0.3rem; }
+  .edu-major { font-size: 0.87rem; color: var(--accent-neon); font-weight: 500; }
+
+  .awards-list { display: flex; flex-direction: column; gap: 0.8rem; max-width: 700px; margin: 2rem auto 0; }
+  .award-item { display: flex; align-items: center; gap: 1rem; background: #141c38; border: 1px solid rgba(129,140,248,0.2); border-radius: 12px; padding: 1.1rem 1.5rem; transition: all 0.3s; }
+  .award-item:hover { border-color: rgba(103,232,249,0.35); box-shadow: 0 4px 18px rgba(99,102,241,0.18); }
+  .award-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .award-text { flex: 1; }
+  .award-name { font-size: 0.93rem; font-weight: 700; color: var(--text-primary); }
+  .award-issuer { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem; }
+  .award-year { font-family: 'Space Grotesk', sans-serif; font-size: 0.83rem; color: var(--accent-cyan); font-weight: 700; flex-shrink: 0; }
+
+  .contact-inner { max-width: 800px; margin: 0 auto; text-align: center; }
+  .contact-tagline { font-size: 1.05rem; color: var(--text-secondary); line-height: 1.9; margin-bottom: 3.5rem; }
+  .contact-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem; margin-bottom: 3rem; }
+  .contact-card { background: #141c38; border: 1px solid rgba(129,140,248,0.2); border-radius: 16px; padding: 1.8rem 1.2rem; display: flex; flex-direction: column; align-items: center; gap: 0.7rem; text-decoration: none; color: inherit; transition: all 0.3s; }
+  .contact-card:hover { border-color: rgba(129,140,248,0.5); transform: translateY(-4px); }
+  .contact-card-icon { width: 50px; height: 50px; border-radius: 14px; background: linear-gradient(135deg, rgba(99,102,241,0.2), rgba(103,232,249,0.15)); border: 1px solid rgba(129,140,248,0.3); display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+  .contact-card-label { font-size: 0.73rem; color: var(--text-muted); text-transform: uppercase; font-weight: 600; }
+  .contact-card-value { font-size: 0.93rem; font-weight: 700; color: var(--text-primary); }
+
+  footer { background: var(--bg-secondary); border-top: 1px solid var(--border); padding: 2rem 5vw; display: flex; align-items: center; justify-content: space-between; font-size: 0.78rem; color: var(--text-muted); flex-wrap: wrap; gap: 1rem; }
+
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2rem; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+  .modal-overlay.active { opacity: 1; pointer-events: all; }
+  .modal-inner { width: 100%; max-width: 900px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
+  .modal-video { 
+    aspect-ratio: 16/9; 
+    background: #000; 
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  .modal-footer { padding: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+  .modal-close { background: none; border: 1px solid var(--border); color: var(--text-secondary); padding: 0.5rem 1.2rem; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+  .modal-close:hover { border-color: var(--accent-neon); color: var(--accent-neon); }
+
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (max-width: 768px) {
+    nav { padding: 1rem 4vw; }
+    .nav-links { gap: 1.2rem; }
+    .nav-links a { font-size: 0.75rem; }
+    section { padding: 5rem 4vw; }
+    .about-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .works-grid { grid-template-columns: 1fr; }
+    .works-grid > .work-card { grid-column: 1 !important; }
+    .timeline::before { left: 1rem; }
+    .timeline-item { width: 100%; left: 0 !important; text-align: left; padding-left: 3.5rem; padding-right: 0; }
+    .timeline-item:nth-child(odd) .timeline-dot,
+    .timeline-item:nth-child(even) .timeline-dot { left: 10px; right: auto; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">KK <span>/ AI Films</span></div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#works">Works</a></li>
+    <li><a href="#career">경력</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">AI Video Creator &amp; Cultural Arts Director</div>
+  <h1 class="hero-title"><span class="name-kr">김 경 욱</span></h1>
+  <p class="hero-subtitle">Kyunguk Kim · AI Filmmaker</p>
+  <p class="hero-desc">예술경영 전문가에서 AI 영상 크리에이터로—<br>문화와 기술의 경계를 허물며 새로운 시각 언어를 탐구합니다.</p>
+  <div class="hero-cta">
+    <a href="#works" class="btn-primary">▶ 작품 보기</a>
+    <a href="#contact" class="btn-secondary">연락하기 →</a>
+  </div>
+</section>
+
+<section id="about" style="background:var(--bg-secondary)">
+  <div class="section-wrap">
+    <div class="section-header">
+      <p class="section-tag">About Me</p>
+      <h2 class="section-title">예술과 AI의 교차점에서</h2>
+      <div class="accent-divider"></div>
+    </div>
+    <div class="about-grid reveal">
+      <div class="about-text">
+        <p>나는 언제나 <strong>이미지로 꿈을 꾸는 사람</strong>이었습니다.<br>영국 런던에서 예술경영을 공부하던 시절, 미술관 문을 닫는 마지막 순간까지 작품 앞에 서 있던 그 감각—그것이 나를 지금 여기까지 이끌었습니다.</p>
+        <p>30년간 <strong>문화예술의 언어</strong>를 다뤄왔습니다. 서울문화재단에서 예술 정책을 짜고, 서울시의회에서 법과 제도를 다듬으며, 동대문문화재단 대표이사로 현장의 온도를 온몸으로 느꼈습니다. 그 모든 경험이 이제 <strong>새로운 붓</strong>을 만났습니다—바로 AI입니다.</p>
+        <p>AI는 내가 미처 상상하지 못한 세계를 눈앞에 펼쳐 보입니다. 나는 그 세계에 <strong>이야기와 감정</strong>을 불어넣습니다. 텍스트 한 줄에서 탄생하는 영상, 상상이 현실이 되는 순간—그 경이로움을 당신과 나누고 싶습니다.</p>
+        <div class="tools-list">
+          <span class="tool-chip">Sora</span>
+          <span class="tool-chip">Runway</span>
+          <span class="tool-chip">Kling</span>
+          <span class="tool-chip">Pika</span>
+          <span class="tool-chip">Midjourney</span>
+          <span class="tool-chip">DALL·E 3</span>
+        </div>
+      </div>
+      <div class="about-stats">
+        <div class="stat-card">
+          <div class="stat-number">30+</div>
+          <div class="stat-label">문화예술 분야<br>경력 연수</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2권</div>
+          <div class="stat-label">단독 저서<br>(문화정책 분야)</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">AI</div>
+          <div class="stat-label">영상 창작의<br>새로운 도전</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">3회</div>
+          <div class="stat-label">서울시<br>연구저술상 수상</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="works" style="background:var(--bg-primary)">
+  <div class="section-wrap">
+    <div class="section-header">
+      <p class="section-tag">AI Works</p>
+      <h2 class="section-title">AI 영상 작품</h2>
+      <div class="accent-divider"></div>
+      <p style="color:var(--text-secondary);font-size:0.9rem;line-height:1.7;">인공지능 도구와 인간의 상상력이 빚어낸 시각 예술.</p>
+    </div>
+
+    <div class="works-grid reveal">
+      <div class="work-card" onclick="openModal('무쏘맨의 마술쇼', 'KGM의 공모전 무쏘맨 응모 작품', 'https://www.youtube.com/shorts/wDtoyP0r0AY')">
+        <div class="work-thumbnail">
+          <img src="https://img.youtube.com/vi/wDtoyP0r0AY/maxresdefault.jpg" alt="무쏘맨의 마술쇼" onerror="this.src='https://img.youtube.com/vi/wDtoyP0r0AY/hqdefault.jpg';" style="width:100%;height:100%;object-fit:cover;">
+          <span class="work-featured-badge">✦ Featured</span>
+          <div class="play-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span class="work-date">2026. 02</span>
+            <span class="work-number">No.001</span>
+          </div>
+          <h3 class="work-title">무쏘맨의 마술쇼</h3>
+          <p class="work-desc">KGM의 공모전 무쏘맨 응모 작품. AI가 선사하는 환상적인 마술쇼에서 무쏘는 예상치 못한 방식으로 등장한다.</p>
+          <div class="work-tools">
+            <span class="work-tool">Kling AI</span>
+            <span class="work-tool">Flola AI</span>
+            <span class="work-tool">Grok</span>
+            <span class="work-tool">Midjourney</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card" onclick="openModal('AI가 우리에게 전하는 말', 'AI시대 현명하게 살아남는 방법', 'https://www.youtube.com/shorts/_1dw14htJCA')">
+        <div class="work-thumbnail">
+          <img src="https://img.youtube.com/vi/_1dw14htJCA/maxresdefault.jpg" alt="AI가 우리에게 전하는 말" onerror="this.src='https://img.youtube.com/vi/_1dw14htJCA/hqdefault.jpg';" style="width:100%;height:100%;object-fit:cover;">
+          <div class="play-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span class="work-date">2026. 02</span>
+            <span class="work-number">No.002</span>
+          </div>
+          <h3 class="work-title">AI가 우리에게 전하는 말</h3>
+          <p class="work-desc">AI 시대를 현명하게 살아가는 방법. 인공지능이 직접 전하는 메시지를 통해 기술과 인간이 공존하는 미래를 탐색합니다.</p>
+          <div class="work-tools">
+            <span class="work-tool">Midjourney</span>
+            <span class="work-tool">Grok</span>
+            <span class="work-tool">Vrew</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card" onclick="openModal('걷기만 했는데 인바디가 나빠진 이유', '60대 인바디를 좋게 나오게 하는 핵심 비법', 'https://www.youtube.com/shorts/Z7tq1Fw9YGw')">
+        <div class="work-thumbnail">
+          <img src="https://img.youtube.com/vi/Z7tq1Fw9YGw/maxresdefault.jpg" alt="걷기만 했는데 인바디가 나빠진 이유" onerror="this.src='https://img.youtube.com/vi/Z7tq1Fw9YGw/hqdefault.jpg';" style="width:100%;height:100%;object-fit:cover;">
+          <div class="play-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span class="work-date">2026. 02</span>
+            <span class="work-number">No.003</span>
+          </div>
+          <h3 class="work-title">걷기만 했는데 인바디가 나빠진 이유</h3>
+          <p class="work-desc">60대 인바디를 좋게 나오게 하는 핵심 비법. 단순한 걷기 운동의 함정과 균형 잡힌 건강 관리의 중요성을 AI 비주얼로 풀어냈습니다.</p>
+          <div class="work-tools">
+            <span class="work-tool">Midjourney</span>
+            <span class="work-tool">Grok</span>
+            <span class="work-tool">Vrew</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card" onclick="openModal('[직장페르소나] 사원 김지안의 페르소나 &quot;하얀 거짓말&quot;', '대한민국 직장인의 애환을 담은 5부작 숏폼 드라마 | 매주 토요일 오전 9시 업로드', 'https://www.youtube.com/shorts/E5qOFTsck2g')">
+        <div class="work-thumbnail">
+          <img src="https://img.youtube.com/vi/E5qOFTsck2g/maxresdefault.jpg" alt="[직장페르소나]" onerror="this.src='https://img.youtube.com/vi/E5qOFTsck2g/hqdefault.jpg';" style="width:100%;height:100%;object-fit:cover;">
+          <span class="work-featured-badge">✦ Series</span>
+          <div class="play-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span class="work-date">2026. 연중</span>
+            <span class="work-number">No.004</span>
+          </div>
+          <h3 class="work-title">[직장페르소나] 5부작 시리즈</h3>
+          <p class="work-desc">직장인이 자신의 진짜 페르소나를 직장에 맞게 바꾸어 생활하는 대한민국 직장인의 애환. 사원부터 대표이사까지 35년 조직생활 경험을 녹인 드라마.</p>
+          <div class="work-tools">
+            <span class="work-tool">Kling AI</span>
+            <span class="work-tool">Suno AI</span>
+            <span class="work-tool">Higgsfield</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="work-card" onclick="openModal('[장승을 아시나요?]', '생성형 AI를 활용한 장승의 현대적 의미 다큐멘터리', 'https://www.youtube.com/watch?v=pdKruxPSdb0&t=4s')">
+        <div class="work-thumbnail">
+          <img src="https://img.youtube.com/vi/pdKruxPSdb0/maxresdefault.jpg" alt="[장승을 아시나요?]" onerror="this.src='https://img.youtube.com/vi/pdKruxPSdb0/hqdefault.jpg';" style="width:100%;height:100%;object-fit:cover;">
+          <div class="play-overlay"><div class="play-btn">▶</div></div>
+        </div>
+        <div class="work-body">
+          <div class="work-meta">
+            <span class="work-date">2026. 02</span>
+            <span class="work-number">No.005</span>
+          </div>
+          <h3 class="work-title">[장승을 아시나요?]</h3>
+          <p class="work-desc">생성형 AI를 활용한 장승의 현대적 의미 다큐멘터리. AI로 제작했지만 사실적 내용과 문화유산의 가치를 담은 실험적 작품입니다.</p>
+          <div class="work-tools">
+            <span class="work-tool">Grok AI</span>
+            <span class="work-tool">Whisk</span>
+            <span class="work-tool">Midjourney</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="career" style="background:var(--bg-secondary)">
+  <div class="section-wrap">
+    <div class="section-header">
+      <p class="section-tag">Career Journey</p>
+      <h2 class="section-title">걸어온 길</h2>
+      <div class="accent-divider"></div>
+    </div>
+
+    <div class="timeline reveal">
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-period">2023.02 — 2025.02</div>
+          <div class="timeline-org">동대문문화재단</div>
+          <div class="timeline-role">대표이사</div>
+          <div class="timeline-detail">재단 운영 총괄</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-period">2007.07 — 2021.12</div>
+          <div class="timeline-org">서울시의회</div>
+          <div class="timeline-role">문화체육관광위원회 수석전문위원</div>
+          <div class="timeline-detail">위원회 운영 총괄 · 14년간 재직</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-period">2004.03 — 2007.07</div>
+          <div class="timeline-org">서울문화재단</div>
+          <div class="timeline-role">학술사업부/예술교육팀 부장·팀장</div>
+          <div class="timeline-detail">문화예술 정책 수립 · 사업 운영</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card">
+          <div class="timeline-period">1986.10 — 1999.02</div>
+          <div class="timeline-org">대우재단</div>
+          <div class="timeline-role">학술사업부 사원/대리</div>
+          <div class="timeline-detail">학술사업 기획 및 운영</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" style="background:var(--bg-primary)">
+  <div class="contact-inner">
+    <div class="section-header" style="margin:0 auto 1rem;text-align:center;max-width:600px;">
+      <p class="section-tag" style="justify-content:center;">Contact</p>
+      <h2 class="section-title">함께 만들어봐요</h2>
+      <div class="accent-divider" style="margin:1rem auto 2rem;"></div>
+    </div>
+    <p class="contact-tagline">협업 제안, 작품 문의, 강연 요청 등 어떤 이야기든 환영합니다.</p>
+    <div class="contact-cards reveal">
+      <a href="tel:010-3121-0703" class="contact-card">
+        <div class="contact-card-icon">📱</div>
+        <span class="contact-card-label">Phone</span>
+        <span class="contact-card-value">010-3121-0703</span>
+      </a>
+      <a href="mailto:citykim63@naver.com" class="contact-card">
+        <div class="contact-card-icon">✉️</div>
+        <span class="contact-card-label">E-mail</span>
+        <span class="contact-card-value">citykim63@naver.com</span>
+      </a>
+      <div class="contact-card" style="cursor:default;">
+        <div class="contact-card-icon">📍</div>
+        <span class="contact-card-label">Location</span>
+        <span class="contact-card-value" style="font-size:0.82rem;">경기도 하남시</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Kyunguk Kim · AI Video Portfolio</span>
+  <span style="font-size:0.72rem;">Powered by AI · Built with ♡</span>
+</footer>
+
+<div class="modal-overlay" id="videoModal" onclick="closeModal(event)">
+  <div class="modal-inner">
+    <div class="modal-video" id="modalContent">
+      <span style="font-size:2.5rem;display:block;">🎬</span>
+    </div>
+    <div class="modal-footer">
+      <div>
+        <span id="modalTitle" style="font-weight:600;color:var(--text-primary);font-size:0.9rem;display:block;"></span>
+        <span id="modalSubtitle" style="font-size:0.78rem;color:var(--text-muted);margin-top:0.2rem;display:block;"></span>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕ 닫기</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  function openModal(title, subtitle, videoUrl) {
+    // YouTube 영상을 새 탭에서 열기
+    window.open(videoUrl, '_blank');
+  }
+
+  function closeModal(event) {
+    if (!event || event.target === document.getElementById('videoModal') || event.currentTarget.tagName === 'BUTTON') {
+      document.getElementById('videoModal').classList.remove('active');
+      setTimeout(() => {
+        document.getElementById('modalContent').innerHTML = '<span style="font-size:2.5rem;display:block;">🎬</span>';
+      }, 300);
+    }
+  }
+
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.getAttribute('id');
+    });
+    navLinks.forEach(a => {
+      a.style.color = a.getAttribute('href') === '#' + current ? 'var(--accent-neon)' : '';
+    });
+  });
+</script>
+</body>
 </html>
